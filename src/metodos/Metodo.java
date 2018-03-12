@@ -84,6 +84,7 @@ public class Metodo {
 		}
 		for (String alumno : alumnos) {
 			listaAlumnos.add(alumno);
+
 		}
 		System.out.println();
 		ordenarListaAlumnos(listaAlumnos);
@@ -91,9 +92,13 @@ public class Metodo {
 			System.out.print("\n" + listaAlumnos.get(i));
 			for (int j = 0; j < asignaturas.length; j++)
 				System.out.print("\t\t" + datos.get(listaAlumnos.get(i)).get(j));
-			
+
 		}
+		System.out.println();
 		notasMediasAlumnos(datos);
+		System.out.println("-----------------");
+		notasMediasAsignaturas(datos);
+
 	}
 
 	public void ordenarListaAlumnos(ArrayList<String> listaAlumnos) {
@@ -106,19 +111,38 @@ public class Metodo {
 				}
 
 	}
-	
-	public void notasMediasAlumnos (HashMap<String, ArrayList<Integer>> datos) {
+
+	public void notasMediasAlumnos(HashMap<String, ArrayList<Integer>> datos) {
+		ArrayList<String> listaAlumnos = new ArrayList<String>();
 		Set<String> alumnos = datos.keySet();
 		for (String alumno : alumnos) {
+			listaAlumnos.add(alumno);
+		}
+		System.out.println();
+		ordenarListaAlumnos(listaAlumnos);
+		for (String alumno : listaAlumnos) {
 			float nota = 0;
-			for (int i=0; i<datos.get(alumno).size(); i++) {
+			for (int i = 0; i < datos.get(alumno).size(); i++) {
 				nota += datos.get(alumno).get(i);
 			}
-			float notaMedia = nota/alumnos.size();
-			System.out.println(notaMedia);
+			float notaMedia = nota / alumnos.size();
+			System.out.println("Nota media de " + alumno + " : " + notaMedia + "\t");
 		}
-		
+
 	}
-	
-	
+
+	public void notasMediasAsignaturas(HashMap<String, ArrayList<Integer>> datos) {
+		String[] asignaturas = leerFicheroAsignaturas("ficheros/asignaturas.txt");
+		Set<String> alumnos = datos.keySet();
+		for (int i = 0; i < asignaturas.length; i++) {
+			float nota = 0;
+			for (String alumno : alumnos) {
+				nota += datos.get(alumno).get(i);
+			}
+			float notaMedia = nota / alumnos.size();
+			System.out.println("Nota media de " + asignaturas[i] + " : " + notaMedia + "\t");
+		}
+
+	}
+
 }
