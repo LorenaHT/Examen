@@ -10,7 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 public class Metodo {
-	
+
 	public String[] leerFicheroAsignaturas(String fichero) {
 		String[] resultado = new String[5];
 		try {
@@ -19,7 +19,7 @@ public class Metodo {
 			String linea;
 			while ((linea = br.readLine()) != null) {
 				String[] campos = linea.split(",");
-				for (int i=0; i<campos.length; i++) 
+				for (int i = 0; i < campos.length; i++)
 					resultado[i] = campos[i];
 			}
 			fr.close();
@@ -35,17 +35,18 @@ public class Metodo {
 		return resultado;
 	}
 	
-	/*public HashMap<Integer, String> LeerFicheroHashMapIntegerString(String fichero) {
-		HashMap<Integer, String> provincias = new HashMap<Integer, String>();
+	public HashMap<String, ArrayList<String>> leerFicheroNotasAlumnos(String fichero) {
+		HashMap<String, ArrayList<String>> alumnos = new HashMap<String, ArrayList<String>>();
+		ArrayList<String> notas = new ArrayList<String>();
 		try {
 			FileReader fr = new FileReader(fichero);
 			BufferedReader br = new BufferedReader(fr);
 			String linea;
 			while ((linea = br.readLine()) != null) {
-				String[] campos = linea.split("%");
-				int id = Integer.parseInt(campos[0]);
-				String cadena = campos[1] + "#" + campos[2] + "#" + campos[3];
-				provincias.put(id, cadena);
+				String[] campos = linea.split("#");
+				String nombre = campos[0];
+				notas.add(campos[1]);
+				alumnos.put(nombre, notas);
 			}
 			fr.close();
 			br.close();
@@ -57,8 +58,24 @@ public class Metodo {
 		} catch (NullPointerException e) {
 			System.err.println("Error: " + e.getMessage());
 		}
-		return provincias;
+		return alumnos;
 	}
+
+	public HashMap<String,ArrayList<String>> leerNotas(String fichero) {
+	HashMap<String,ArrayList<String>> resultado = new HashMap<String,ArrayList<String>>();
+	HashMap<String, String> datos = leerFicheroNotasAlumnos(fichero);
+		Set<String> alumnos = datos.keySet();
+		for (String alumno : alumnos) {
+			ArrayList<String> notas = new ArrayList<String>();
+			String nota = datos.get(alumno);
+			String[] campos = nota.split(",");	
+			for (String campo : campos) {
+				notas.add(campo);
+			}
+			resultado.put(alumno, notas);
+		}
+		return resultado;
+}
 
 	public HashMap<Integer, LinkedHashMap<Integer, ArrayList<String>>> LeerFicheroHashMapIntegerLinkedHashMap(
 			String ficheroComunidades, String ficheroProvincias) {
@@ -83,6 +100,6 @@ public class Metodo {
 		}
 		System.out.println(resultado);
 		return resultado;
-	}*/
+	}
 
 }
