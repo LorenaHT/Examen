@@ -14,7 +14,7 @@ public class Principal {
 		System.out.println(asignaturas[i]);*/
 		HashMap<String, String> alumnos = metodos.leerFicheroNotasAlumnos("ficheros/notasAlumnos.txt");
 		//System.out.println(alumnos);
-		HashMap<String, ArrayList<String>> notas = metodos.leerNotas("ficheros/notasAlumnos.txt");
+		HashMap<String, ArrayList<Integer>> notas = metodos.leerNotas("ficheros/notasAlumnos.txt");
 		//System.out.println(notas);
 		metodos.listarAlumnos(notas);
 	}
