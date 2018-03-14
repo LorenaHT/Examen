@@ -10,6 +10,8 @@ import java.util.Set;
 
 public class Metodo {
 
+	// Solucion mia : 10
+
 	public String[] leerFicheroAsignaturas(String fichero) {
 		String[] resultado = new String[5];
 		try {
@@ -84,7 +86,6 @@ public class Metodo {
 		}
 		for (String alumno : alumnos) {
 			listaAlumnos.add(alumno);
-
 		}
 		System.out.println();
 		ordenarListaAlumnos(listaAlumnos);
@@ -92,7 +93,6 @@ public class Metodo {
 			System.out.print("\n" + listaAlumnos.get(i));
 			for (int j = 0; j < asignaturas.length; j++)
 				System.out.print("\t\t" + datos.get(listaAlumnos.get(i)).get(j));
-
 		}
 		System.out.println();
 		notasMediasAlumnos(datos);
@@ -142,6 +142,99 @@ public class Metodo {
 			float notaMedia = nota / alumnos.size();
 			System.out.println("Nota media de " + asignaturas[i] + " : " + notaMedia + "\t");
 		}
+
+	}
+
+	// Solucion profe:
+
+	public ArrayList<String> getAsignaturas(String ficheroAsignaturas) {
+		ArrayList<String> asignaturas = new ArrayList<String>();
+		try {
+			FileReader fr = new FileReader(ficheroAsignaturas);
+			BufferedReader br = new BufferedReader(fr);
+			String linea;
+			while ((linea = br.readLine()) != null) {
+				String[] asigs = linea.split(",");
+				for (String asig : asigs)
+					asignaturas.add(asig);
+			}
+			fr.close();
+			br.close();
+		} catch (FileNotFoundException e) {// Catch exception if any
+			System.err.println("Error: " + e.getMessage());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.err.println("Error: " + e.getMessage());
+		} catch (NullPointerException e) {
+			System.err.println("Error: " + e.getMessage());
+		}
+		return asignaturas;
+	}
+
+	public static void main(String[] args) {
+		Metodo metodo = new Metodo();
+		ArrayList<String> asignaturas = metodo.getAsignaturas("ficheros/asignaturas.txt");
+		System.out.println(asignaturas);
+		HashMap<String, ArrayList<Integer>> notas = metodo.getNotas("ficheros/notasAlumnos.txt");
+		System.out.println(notas);
+		metodo.listado();
+	}
+
+	public HashMap<String, ArrayList<Integer>> getNotas(String ficheroNotas) {
+		HashMap<String, ArrayList<Integer>> notas = new HashMap<String, ArrayList<Integer>>();
+		try {
+			FileReader fr = new FileReader(ficheroNotas);
+			BufferedReader br = new BufferedReader(fr);
+			String linea;
+			while ((linea = br.readLine()) != null) {
+				String[] campos = linea.split("#");
+				String clave = campos[0];
+				String[] notasString = campos[1].split(",");
+				ArrayList<Integer> valor = new ArrayList<Integer>();
+				for (String nt : notasString)
+					valor.add(Integer.parseInt(nt));
+				notas.put(clave, valor);
+			}
+			fr.close();
+			br.close();
+		} catch (FileNotFoundException e) {// Catch exception if any
+			System.err.println("Error: " + e.getMessage());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.err.println("Error: " + e.getMessage());
+		} catch (NullPointerException e) {
+			System.err.println("Error: " + e.getMessage());
+		}
+		return notas;
+	}
+
+	public void listado() {
+		ArrayList<String> asignaturas = getAsignaturas("ficheros/asignaturas.txt");
+		HashMap<String, ArrayList<Integer>> notas = getNotas("ficheros/notasAlumnos.txt");
+		Set<String> claves = notas.keySet();
+		System.out.print("\t\t");
+		for (String asignatura : asignaturas)
+			System.out.print(asignatura + "\t");
+		System.out.println("");
+		int[] notaMediaAsignaturas = new int[asignaturas.size()];
+		for (String clave : claves) {
+			System.out.print(clave + " :  \t");
+			ArrayList<Integer> listaNotasAlumno = notas.get(clave);
+			int acum = 0;
+			for (int i = 0; i < listaNotasAlumno.size(); i++) {
+				System.out.print(listaNotasAlumno.get(i) + "\t");
+				acum += listaNotasAlumno.get(i);
+				notaMediaAsignaturas[i] += listaNotasAlumno.get(i);
+			}
+			System.out.print((float) acum / listaNotasAlumno.size());
+			System.out.println("");
+
+		}
+		System.out.print("\t\t\t\t");
+		for (int i : notaMediaAsignaturas)
+			System.out.print((float) i / asignaturas.size() + "\t");
+
+		System.out.println();
 
 	}
 
